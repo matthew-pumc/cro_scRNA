@@ -1,0 +1,75 @@
+---
+title: "3D UMAP plot"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Alevin
+```{r Loading Data alv, include=FALSE}
+library(Seurat)
+library(dplyr)
+library(ggplot2)
+library(ggsci)
+library(plotly)
+```
+
+```{r read alv, include=FALSE}
+load(file = '/Users/matthew/Downloads/crov7_alv_mincell5.Rdata')
+```
+
+```{r 3D Scatter alv, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE}
+seurat_obj <- RunUMAP(seurat_obj,
+                      dims = 1:50,
+                      n.components = 3L,
+                      verbose = F)
+
+umap_1 <- seurat_obj[["umap"]]@cell.embeddings[,1]
+umap_2 <- seurat_obj[["umap"]]@cell.embeddings[,2]
+umap_3 <- seurat_obj[["umap"]]@cell.embeddings[,3]
+
+plot.data <- FetchData(seurat_obj, vars = c("UMAP_1", "UMAP_2", "UMAP_3", "seurat_clusters"))
+
+plot_ly(data = plot.data, 
+        x = ~UMAP_1, y = ~UMAP_2, z = ~UMAP_3, 
+        color = ~seurat_clusters,
+        colors = "Paired",
+        type = "scatter3d", 
+        mode = "markers", 
+        marker = list(size = 2),
+        text = ~seurat_clusters,
+        hoverinfo = "text")
+```
+
+# Cell Ranger
+
+```{r read Cell Ranger, include=FALSE}
+rm(list=ls())
+gc()
+load(file = '/Users/matthew/Downloads/crov7_cr_mincell5.Rdata')
+```
+
+```{r 3D Scatter, echo=FALSE, fig.height=8, fig.width=10, warning=FALSE}
+seurat_obj <- RunUMAP(seurat_obj,
+                      dims = 1:50,
+                      n.components = 3L,
+                      verbose = F)
+
+umap_1 <- seurat_obj[["umap"]]@cell.embeddings[,1]
+umap_2 <- seurat_obj[["umap"]]@cell.embeddings[,2]
+umap_3 <- seurat_obj[["umap"]]@cell.embeddings[,3]
+
+plot.data <- FetchData(seurat_obj, vars = c("UMAP_1", "UMAP_2", "UMAP_3", "seurat_clusters"))
+
+plot_ly(data = plot.data, 
+        x = ~UMAP_1, y = ~UMAP_2, z = ~UMAP_3, 
+        color = ~seurat_clusters,
+        colors = "Paired",
+        type = "scatter3d", 
+        mode = "markers", 
+        marker = list(size = 2),
+        text = ~seurat_clusters,
+        hoverinfo = "text")
+```
+
+
